@@ -12,7 +12,7 @@ KV = '''
         orientation: 'vertical'
 
         AsyncImage:
-            source: 'images\lion.png' 
+            source: 'https://raw.githubusercontent.com/vaishnav6/kivy/main/images/lion.png' 
             size_hint_y: 0.7 
         
 <TabletView>
@@ -20,7 +20,7 @@ KV = '''
         orientation: 'vertical'
 
         AsyncImage:
-            source: 'images\lion.png' 
+            source: 'https://raw.githubusercontent.com/vaishnav6/kivy/main/images/lion.png' 
             size_hint_y: 0.7
             
 <DesktopView>
@@ -28,7 +28,7 @@ KV = '''
         orientation: 'vertical'
 
         AsyncImage:
-            source: 'images\lion.png' 
+            source: 'https://raw.githubusercontent.com/vaishnav6/kivy/main/images/lion.png' 
             size_hint_y: 0.7
 
 ResponsiveView:
