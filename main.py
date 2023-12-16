@@ -1,18 +1,19 @@
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivymd.uix.label import MDLabel
-from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.imagelist import *
-from kivymd.uix.button import MDRectangleFlatButton
-from kivy.uix.screenmanager import ScreenManager, Screen
-from datetime import datetime
-
+from kivymd.uix.list import OneLineIconListItem, IconLeftWidget
+from kivymd.uix.menu import MDDropdownMenu
+from kivy.uix.screenmanager import *
+from kivy.metrics import dp
 
 KV = '''
-<MobileView>
-    FloatLayout:
+WindowManager:
+    IntroWindow:
+    HomeWindow:
 
+<IntroWindow>:
+    name: "intro"
+    FloatLayout:
         AsyncImage:
             source: 'https://i.ibb.co/rHFY8Hp/logo-removebg-preview.png' 
             size_hint_y: 0.7
@@ -26,89 +27,37 @@ KV = '''
             font_weight: "bold"
             elevation_hover: 4
             pos_hint: {'center_x': 0.5, 'center_y': 0.22}
-            on_release: app.on_get_started_button_click(self)
+            on_release: app.on_started_button_click(self)
 
-<TabletView>
+<HomeWindow>:
+    name: "home"
     FloatLayout:
+        RoundMenuButton:
+            id: round_menu_button
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            on_release: app.menu.open()
 
-        AsyncImage:
-            source: 'https://i.ibb.co/rHFY8Hp/logo-removebg-preview.png' 
-            size_hint_y: 0.7
-            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
 
-        MDRectangleFlatButton:
-            text: "Get Started"
-            adaptive_size: True
-            md_bg_color: "gold"
-            text_color: "#202020"
-            font_weight: "bold"
-            elevation_hover: 4
-            pos_hint: {'center_x': 0.5, 'center_y': 0.22}
-            on_release: app.on_get_started_button_click(self)
-
-<DesktopView>
-    FloatLayout:
-
-        AsyncImage:
-            source: 'https://i.ibb.co/rHFY8Hp/logo-removebg-preview.png' 
-            size_hint_y: 0.7
-            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
-
-        MDRectangleFlatButton:
-            text: "Get Started"
-            adaptive_size: True
-            md_bg_color: "gold"
-            text_color: "#202020"
-            font_weight: "bold"
-            elevation_hover: 4
-            pos_hint: {'center_x': 0.5, 'center_y': 0.22}
-            on_release: app.on_get_started_button_click(self)
-<HomeScreen>
-    FloatLayout:
-        MDLabel:
-            id: datetime_label
-            halign: "center"
-            theme_text_color: "Custom"
-            text_color: 0, 0.5, 1, 1
-            font_style: "H6"
-            bold: True
-            pos_hint: {'center_x': 0.9, 'center_y': 0.9}
-
-ResponsiveView:
+<RoundMenuButton@MDFloatingActionButton>:
+    icon: "lightning-bolt-outline"
+    size: dp(56), dp(56)
+    elevation_normal: 8
+    elevation_hover: 12
+    md_bg_color: "orangered"
+    on_release: app.menu.open()
 '''
 
+class IconListItem(OneLineIconListItem):
+    icon = "dots-vertical"
 
-class CommonComponentLabel(MDLabel):
+class IntroWindow(Screen):
     pass
 
-
-class MobileView(MDScreen):
+class HomeWindow(Screen):
     pass
 
-
-class TabletView(MDScreen):
+class WindowManager(ScreenManager):
     pass
-
-
-class DesktopView(MDScreen):
-    pass
-
-class HomeScreen(MDScreen):
-    pass
-
-class ResponsiveView(ScreenManager):
-    def __init__(self, **kw):
-        super().__init__(**kw)
-        self.mobile_view = MobileView(name='mobile_view')
-        self.tablet_view = TabletView(name='tablet_view')
-        self.desktop_view = DesktopView(name='desktop_view')
-        self.home_screen = HomeScreen(name='home_screen')
-        self.add_widget(self.mobile_view)
-        self.add_widget(self.tablet_view)
-        self.add_widget(self.desktop_view)
-        self.add_widget(self.home_screen)
-
-    
 
 class Vimoweb(MDApp):
     def build(self):
@@ -116,20 +65,36 @@ class Vimoweb(MDApp):
         self.theme_cls.primary_palette = "Orange"
         return Builder.load_string(KV)
 
-    def on_get_started_button_click(self, instance):
-        # Disable the button during screen transition
-        instance.disabled = True
+    def on_started_button_click(self, instance):
+        self.root.current = "home"
+        self.root.transition.direction = "up"
 
-        # Change the current screen to the home screen
-        self.root.current = 'home_screen'
-        datetime_label = self.root.get_screen('home_screen').ids.datetime_label
-        current_datetime = datetime.now()
+        menu_items = [
+            {
+                "viewclass": "IconListItem",
+                "text": "IP",
+                "height": dp(56),
+                "on_release": lambda x="IP": self.set_menu_item(x),
+            },
+            {
+                "viewclass": "IconListItem",
+                "text": "Facebook",
+                "height": dp(56),
+                "on_release": lambda x="Facebook": self.set_menu_item(x),
+                
+            },
+        ]
+        self.menu = MDDropdownMenu(
+            caller=self.root.get_screen('home').ids.round_menu_button,
+            items=menu_items,
+            position="center",
+            width_mult=4,
+        )
 
-        # Format the datetime object
-        formatted_date = current_datetime.strftime("%d/%m/%Y")
-        formatted_time = current_datetime.strftime("%I:%M %p")
+    def set_menu_item(self, text_item):
+        # Update the label text here
+        print(f"Selected item: {text_item}")
+        self.menu.dismiss()
 
-        datetime_label.text = f"{formatted_time}\n{formatted_date}"
-
-
-Vimoweb().run()
+if __name__ == "__main__":
+    Vimoweb().run()
