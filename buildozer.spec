@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = Vimoweb
+title = vimoweb
 
 # (str) Package name
 package.name = myapp
@@ -44,8 +44,9 @@ requirements = python3==3.7.6,hostpython3==3.7.6,kivy,kivymd,pillow,requests
 
 # (str) Presplash of the application
 #presplash.filename = %(source.dir)s/data/presplash.png
-
+presplash.filename = lion.png
 # (str) Icon of the application
+icon.filename = lion.png
 #icon.filename = %(source.dir)s/data/icon.png
 
 # (list) Supported orientations
