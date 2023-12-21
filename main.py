@@ -9,13 +9,13 @@ MDFloatLayout:
     Image:
         source: 'lion.png'
         size_hint: None, None
-        size: 500, 500
+        size: 900, 900
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
     Label:
         id: typing
         text: ""
         color: "gold"
-        font_size: 35
+        font_size: 50
         bold: True
         pos_hint: {"center_x": 0.5,"center_y": 0.29}
         
