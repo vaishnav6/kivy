@@ -34,7 +34,7 @@ version = 0.1
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
 # version.filename = %(source.dir)s/main.py
-
+android.permissions = RECORD_AUDIO,INTERNET
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
 requirements = python3==3.7.6,hostpython3==3.7.6,kivy,kivymd,pillow,requests,speechrecognition,pyttsx3
